@@ -51,7 +51,7 @@ def loginAndRegister():
         confirm_password = st.text_input("Confirm Password", type="password")
         if st.button("Register"):
             # Check if the username is already in use
-            if username in list(data["Username"]):
+            if username in data["Username"].values:
                 st.warning("Username already exists. Please choose a different username.")
             # Check if the password and confirm password fields match
             elif password != confirm_password:
@@ -74,7 +74,8 @@ def loginAndRegister():
         if st.button("Login"):
             # Check if the username and password are valid
             hashed_password = hash_password(password)
-            if (username in list(data["Username"])) and (hashed_password == list(data[data["Username"]==username]["Password"])[0]):
+            user_match = data[data["Username"] == username]
+            if not user_match.empty and hashed_password == user_match["Password"].values[0]:
                 st.success("Logged in successfully.")
                 st.empty()
                 # Store user data in session state
